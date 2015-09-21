@@ -1,0 +1,68 @@
+<%@ tag body-content="empty"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sigatp" tagdir="/WEB-INF/tags/"%>
+
+<div id="dialog-form" title="Motivo Log" class="gt-form">
+	<div class="gt-bd clearfix">
+		<div class="gt-content clearfix">
+			<sigatp:erros/>
+	   		<label for="txtMotivoLog" class="obrigatorio">Motivo:</label>
+			<textarea id="txtMotivoLog" rows="8" cols="68"></textarea>
+		</div>
+	</div>
+	<span class="alerta menor"><fmt:message key="views.erro.preenchimentoObrigatorio"/></span>
+</div>
+
+<script>
+	$(function(e) {
+		$("#dialog-form").dialog( {   
+			autoOpen: false,
+			height: 400,      
+			width: 350,      
+			modal: true, 
+			resizable:true,
+			buttons: [
+				{			
+					text: "Confirmar",
+					"class":"gt-table-buttons",
+					click: function() {
+						var valid = true;
+						valid = valid && $("txtMotivoLog").val() != null;
+
+						if (valid) {
+							var $formulario = $("#formulario");
+							var input = $("<input>")
+				               .attr("type", "hidden")
+				               .attr("name", "motivoLog").val($("#txtMotivoLog").val());
+							$formulario.append($(input));
+					        var $link = $(this).data("link");
+					        $formulario.attr('action',$link);
+					        $formulario.attr('method','post');
+					        $formulario.submit();
+						}
+						else {
+							$("#divErros").show();
+						    $('#divErros').append("<li><fmt:message key="motivoLogAnnotation.exception"/></li>");
+						}
+
+						return valid;
+					}
+				},
+				{
+					text:"Cancelar",
+					"class":"gt-table-buttons",
+					click: function() {
+						$(this).dialog("close");
+						$("#txtMotivoLog").val("");
+						return false;
+					}
+				}
+			],
+			close: function() {
+				var $formulario = $("#formulario");
+				$("#txtMotivoLog").val("");
+				$(this).dialog("close");
+			}
+		});  
+	});  
+</script>
